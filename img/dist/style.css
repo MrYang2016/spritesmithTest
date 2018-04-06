@@ -1,0 +1,24 @@
+.softImg {
+            background: url(./padding.png) no-repeat;
+            background-size: 410px 410px
+        }
+.book {
+            height: 200px;
+            width: 200px;
+            background-position: 0px 0px;
+        }
+.movie {
+            height: 200px;
+            width: 200px;
+            background-position: 210px 0px;
+        }
+.music {
+            height: 200px;
+            width: 200px;
+            background-position: 0px 210px;
+        }
+.talk {
+            height: 200px;
+            width: 200px;
+            background-position: 210px 210px;
+        }

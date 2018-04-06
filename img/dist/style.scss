@@ -1,0 +1,24 @@
+@mixin softImg {
+            background: url(./padding.png) no-repeat;
+            background-size: 410px 410px
+        }
+@mixin book {
+            height: 200px;
+            width: 200px;
+            background-position: 0px 0px;
+        }
+@mixin movie {
+            height: 200px;
+            width: 200px;
+            background-position: 210px 0px;
+        }
+@mixin music {
+            height: 200px;
+            width: 200px;
+            background-position: 0px 210px;
+        }
+@mixin talk {
+            height: 200px;
+            width: 200px;
+            background-position: 210px 210px;
+        }

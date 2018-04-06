@@ -1,0 +1,18 @@
+{
+  "name": "spritesmith",
+  "version": "1.0.0",
+  "description": "spritesmith test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yang",
+  "license": "ISC",
+  "devDependencies": {
+    "fs": "^0.0.1-security",
+    "spritesmith": "^3.3.0"
+  },
+  "dependencies": {
+    "path": "^0.12.7"
+  }
+}
