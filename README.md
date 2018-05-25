@@ -91,11 +91,17 @@ function getScssDoc(result, type) {
 
 ````
 #### 五、主要参数设置
-````
-const IMG_DIR = '/img';//图片所在文件夹
-const PADDING = 10;//图片间的距离
-const IMG_NAME = 'padding';//生成图片的名称
-const STYLE_TYPE = 'css';//生成样式文件类型
-const STYLE_NAME = 'style';//生成样式文件名称
-````
+使用文件``sprit_config.json``进行参数配置，文件内容如下
+``````
+{
+  "imgDir": "/img", //图片所在文件夹
+  "padding": 20,   //图片间的距离
+  "imgName": "player", //生成图片的名称
+  "styleType": "css", //生成样式文件类型
+  "styleName": "playerImg",  //生成样式文件名称
+  "createBase64":true,  //是否生成base64格式
+  "styleUnit":"rpx"  //样式单位
+}
+
+``````
 
