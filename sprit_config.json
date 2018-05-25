@@ -1,0 +1,9 @@
+{
+  "imgDir": "/img",
+  "padding": 20,
+  "imgName": "player",
+  "styleType": "css",
+  "styleName": "playerImg",
+  "createBase64":true,
+  "styleUnit":"rpx"
+}

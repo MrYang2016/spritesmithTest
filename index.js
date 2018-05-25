@@ -1,12 +1,15 @@
 const spritesmith = require('spritesmith');
 const fs = require('fs');
 const path = require('path');
+const config = require('./sprit_config.json');
+const mime = require('mime-types');
 
-const IMG_DIR = '/img';
-const PADDING = 10;
-const IMG_NAME = 'padding';
-const STYLE_TYPE = 'css';
-const STYLE_NAME = 'style';
+const IMG_DIR = config.imgDir;
+const PADDING = config.padding;
+const IMG_NAME = config.imgName;
+const STYLE_TYPE = config.styleType;
+const STYLE_NAME = config.styleName;
+const STYLE_UNIT = config.styleUnit;
 
 const imgNames = fs.readdirSync(__dirname + IMG_DIR).filter(v => {
     const imgType = ['jpeg', 'png', 'jpg'];
@@ -25,9 +28,10 @@ const urlArr = imgNames.reduce((a, v) => {
 
 spritesmith.run({ src: urlArr, padding: PADDING }, (err, result) => {
     if (err) throw err;
-
-    writeImg(result.image);
-    writeScss(result, STYLE_TYPE);
+    const imgUrl = writeImg(result.image);
+    let base64 = config.createBase64;
+    if (config.createBase64) base64 = createBase64(imgUrl);
+    writeScss(result, STYLE_TYPE, base64);
 });
 
 /**
@@ -35,19 +39,26 @@ spritesmith.run({ src: urlArr, padding: PADDING }, (err, result) => {
  * @param {Buffer} image 
  */
 function writeImg(image) {
-    const url = `${__dirname}${IMG_DIR}/dist/${IMG_NAME}.png`;
+    const url = `${__dirname}/dist/${IMG_NAME}.png`;
     createFolder(url);
     fs.writeFileSync(url, image);
+    return url;
 }
 
 /**
  * 生成样式文件
  */
-function writeScss(result, type) {
-    const scssStr = getScssDoc(result, type);
-    const url = `${__dirname}${IMG_DIR}/dist/${STYLE_NAME}.${type}`;
+function writeScss(result, type, base64) {
+    const scssStr = getScssDoc(result, type, base64);
+    const url = `${__dirname}/dist/${STYLE_NAME}.${type}`;
     createFolder(url);
     fs.writeFileSync(url, scssStr);
+}
+
+function createBase64(imgUrl) {
+    const imgData = fs.readFileSync(imgUrl);
+    const data = new Buffer(imgData).toString('base64');
+    return 'data:' + mime.lookup(imgUrl) + ';base64,' + data;
 }
 
 /**
@@ -66,20 +77,21 @@ function createFolder(url) {
 /**
  * 根据给的信息生成scss代码
  */
-function getScssDoc(result, type) {
+function getScssDoc(result, type, base64) {
     const t = type && (type === 'scss' || type === 'css') ? type : 'scss';
     const preStr = t === 'scss' ? '@mixin ' : '.'
+    const imgUrl = base64 || `./${IMG_NAME}.png`;
     return imgNames.reduce((s, v, i) => {
         const imgMsg = result.coordinates[urlArr[i]];
         s += `\n${preStr}${v.replace(/\.[^\.]*$/, '')} {
-            height: ${imgMsg.height}px;
-            width: ${imgMsg.width}px;
-            background-position: ${imgMsg.x}px ${imgMsg.y}px;
+            height: ${imgMsg.height}${STYLE_UNIT};
+            width: ${imgMsg.width}${STYLE_UNIT};
+            background-position: -${imgMsg.x}${STYLE_UNIT} -${imgMsg.y}${STYLE_UNIT};
         }`;
         return s;
-    }, `${preStr}softImg {
-            background: url(./${IMG_NAME}.png) no-repeat;
-            background-size: ${result.properties.width}px ${result.properties.height}px
+    }, `${preStr}${IMG_NAME}Img {
+            background: url(${imgUrl}) no-repeat;
+            background-size: ${result.properties.width}${STYLE_UNIT} ${result.properties.height}${STYLE_UNIT}
         }`
     );
 }

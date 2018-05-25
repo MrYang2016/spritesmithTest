@@ -13,6 +13,7 @@
     "spritesmith": "^3.3.0"
   },
   "dependencies": {
+    "mime-types": "^2.1.18",
     "path": "^0.12.7"
   }
 }
